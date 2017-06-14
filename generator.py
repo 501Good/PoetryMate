@@ -14,6 +14,8 @@ class PoetryGenerator(object):
 				verse_pattern = self.versePatternGenerator.generate_metres(length=length)
 			except ValueError:
 				pass
+			except TypeError:
+				pass
 		rhymes = get_rhymes(verse_pattern)
 		rhythms = None
 		try:
