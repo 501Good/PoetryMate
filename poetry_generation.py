@@ -3,7 +3,7 @@ import pickle
 
 PUNCTUATION = "’()[]\{\}<>:,…!.«»?‘’“”;/⁄␠·&@*\\•^¤¢$€£¥₩₪†‡°¡¿¬#№%‰‱¶′§~¨_|¦⁂☞∴‽※"
 
-class PoetryGenerator(object):
+class VerseGenerator(object):
 	
 	def __init__(self, filename):
 		self.filename = filename
