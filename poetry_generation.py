@@ -20,8 +20,11 @@ class VerseGenerator(object):
 		return rhythm	
 
 	def __initialize_line(self, rhythm, ending='', last_word=''):
+		init_start_time = time.time()
 		if ending == '':
 			while True:
+				if time.time() - init_start_time > 10:
+						raise TimeoutError
 				seed = random.choice(list(self.cache.keys()))
 				seed_word, next_word = seed[0], seed[1]
 				if len(self.__transform_to_rhythm(seed_word)) > 1 and rhythm.endswith(self.__transform_to_rhythm(seed_word)):
@@ -30,6 +33,8 @@ class VerseGenerator(object):
 		else:
 			seeds = [pair for pair in self.cache.keys() if pair[0].strip(PUNCTUATION)[len(ending) * -1:] == ending and pair[0] not in last_word and last_word not in pair[0]]
 			while True:
+				if time.time() - init_start_time > 10:
+						raise TimeoutError
 				seed = random.choice(seeds)
 				seed_word, next_word = seed[0], seed[1]
 				if len(self.__transform_to_rhythm(seed_word)) > 1 and rhythm.endswith(self.__transform_to_rhythm(seed_word)):

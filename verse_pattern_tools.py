@@ -33,7 +33,7 @@ def unfold_metres(metre):
       verse_line += rhymes[rhyme][0]
     else:
       verse_line += rhymes[rhyme][1]
-  return verse_line[:-1]
+  return verse_line
 
 def get_rhymes(verse_pattern):
   rhymes = []

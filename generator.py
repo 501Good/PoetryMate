@@ -20,7 +20,6 @@ class PoetryGenerator(object):
 
 	def generate_poetry(self):
 		verse_pattern = self.generate_verse_pattern()
-		rhymes = get_rhymes(verse_pattern)
 		rhythms = None
 		while rhythms is None:
 			try:
@@ -31,9 +30,10 @@ class PoetryGenerator(object):
 			except KeyError:
 				print("\nOops, wrong rhythm!\n")
 				verse_pattern = self.generate_verse_pattern()
+		rhymes = get_rhymes(verse_pattern)
 		print("Pattern: %s\nRhymes: %s\n" % (verse_pattern[1:], rhymes))
 		result = None
-		while result is None:
+		while result == None:
 			try:
 				result = self.verseGenerator.generate_markov_text(rhythms, rhymes, verbose=True)
 			except TimeoutError:
@@ -42,7 +42,10 @@ class PoetryGenerator(object):
 				print("\nCannot find any rhymes\n")
 			except IndexError:
 				print("\nCannot find any rhymes\n")
+			except AssertionError:
+				print("Rhymes do not fit the rhythms")
 		return result
+		
 
 def main():
 	verseGenerator = "res/poetry_cache.pm"
