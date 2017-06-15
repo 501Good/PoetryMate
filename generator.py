@@ -1,4 +1,4 @@
-from poetry_generation import VerseGenerator
+from verse_generation import VerseGenerator
 from verse_pattern_generation import VersePatternGenerator
 from verse_pattern_tools import unfold_metres, get_rhymes, get_rhythms
 
