@@ -18,12 +18,13 @@ class PoetryGenerator(object):
 				pass
 		rhymes = get_rhymes(verse_pattern)
 		rhythms = None
-		try:
-			rhythms = get_rhythms(verse_pattern)
-		except ValueError:
-			print("\nOops, wrong rhythm!\n")
-		except KeyError:
-			print("\nOops, wrong rhythm!\n")
+		while rhythms is None:
+			try:
+				rhythms = get_rhythms(verse_pattern)
+			except ValueError:
+				print("\nOops, wrong rhythm!\n")
+			except KeyError:
+				print("\nOops, wrong rhythm!\n")
 		print("Pattern: %s\nRhymes: %s\n" % (verse_pattern[1:], rhymes))
 		result = None
 		while result is None:
