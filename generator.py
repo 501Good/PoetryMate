@@ -7,7 +7,7 @@ class PoetryGenerator(object):
 		self.verseGenerator = VerseGenerator(verseGenerator)
 		self.versePatternGenerator = VersePatternGenerator(versePatternGenerator)
 
-	def generate_poetry(self, length=4):
+	def generate_verse_pattern(self, length=4):
 		verse_pattern = None
 		while verse_pattern is None:
 			try:
@@ -16,6 +16,10 @@ class PoetryGenerator(object):
 				pass
 			except TypeError:
 				pass
+		return verse_pattern
+
+	def generate_poetry(self):
+		verse_pattern = self.generate_verse_pattern()
 		rhymes = get_rhymes(verse_pattern)
 		rhythms = None
 		while rhythms is None:
@@ -23,8 +27,10 @@ class PoetryGenerator(object):
 				rhythms = get_rhythms(verse_pattern)
 			except ValueError:
 				print("\nOops, wrong rhythm!\n")
+				verse_pattern = self.generate_verse_pattern()
 			except KeyError:
 				print("\nOops, wrong rhythm!\n")
+				verse_pattern = self.generate_verse_pattern()
 		print("Pattern: %s\nRhymes: %s\n" % (verse_pattern[1:], rhymes))
 		result = None
 		while result is None:
