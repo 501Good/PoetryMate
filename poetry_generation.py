@@ -1,5 +1,6 @@
 import random
 import pickle
+import time
 
 PUNCTUATION = "’()[]\{\}<>:,…!.«»?‘’“”;/⁄␠·&@*\\•^¤¢$€£¥₩₪†‡°¡¿¬#№%‰‱¶′§~¨_|¦⁂☞∴‽※"
 
@@ -53,7 +54,8 @@ class VerseGenerator(object):
 			w1, w2 = seed_word, next_word
 			gen_words = []
 			gen_words.append(w1)
-			i = 0
+			start_time = time.time()
+			i = 1
 			while len(rhythm) > 0:
 				while True:
 					i += 1
@@ -62,7 +64,7 @@ class VerseGenerator(object):
 						w1, w2 = seed_word, next_word
 						gen_words = []
 						gen_words.append(w1)
-					if i > 2000:
+					if time.time() - start_time > 10:
 						raise TimeoutError
 					save_w1, save_w2 = w1, w2
 					w1, w2 = w2, random.choice(self.cache[(w1, w2)])
