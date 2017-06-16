@@ -1,14 +1,17 @@
 import random
 import pickle
 import time
+from verse_pattern_tools import is_rhyme
 
 PUNCTUATION = "’()[]\{\}<>:,…!.«»?‘’“”;/⁄␠·&@*\\•^¤¢$€£¥₩₪†‡°¡¿¬#№%‰‱¶′§~¨_|¦⁂☞∴‽※"
 
 class VerseGenerator(object):
 	
-	def __init__(self, filename):
+	def __init__(self, filename, soundsFile):
 		self.filename = filename
-		self.cache = pickle.load(open(self.filename, 'rb'))		
+		self.soundsFile = soundsFile
+		self.cache = pickle.load(open(self.filename, 'rb'))	
+		self.sounds = pickle.load(open(self.soundsFile, 'rb'))	
 
 	def __transform_to_rhythm(self, line):
 		rhythm = ''
@@ -19,7 +22,7 @@ class VerseGenerator(object):
 				rhythm = rhythm[:-1] + '+'
 		return rhythm	
 
-	def __initialize_line(self, rhythm, ending='', last_word=''):
+	def __initialize_line(self, rhythm, seeds, ending='', last_word=''):
 		init_start_time = time.time()
 		if ending == '':
 			while True:
@@ -31,7 +34,9 @@ class VerseGenerator(object):
 					rhythm = rhythm[: -1 * len(self.__transform_to_rhythm(seed_word))]
 					return seed_word, next_word, rhythm
 		else:
-			seeds = [pair for pair in self.cache.keys() if pair[0].strip(PUNCTUATION)[len(ending) * -1:] == ending and pair[0] not in last_word and last_word not in pair[0]]
+			#seeds = [pair for pair in self.cache.keys() if is_rhyme(self.sounds[pair[0]], self.sounds[last_word], sound=True)]
+			#print(len(seeds))
+			init_start_time = time.time()
 			while True:
 				if time.time() - init_start_time > 10:
 						raise TimeoutError
@@ -45,6 +50,7 @@ class VerseGenerator(object):
 		assert len(rhythms) == len(rhymes)
 		final_lines = []
 		for n, rhythm in enumerate(rhythms):
+			seeds = []
 			rhyme = ''
 			last_word = ''
 			if n > rhymes[n] - 1:
@@ -54,8 +60,12 @@ class VerseGenerator(object):
 					chop = -3
 				rhyme = final_lines[rhymes[n] - 1].strip(PUNCTUATION)[chop:]
 				last_word = final_lines[rhymes[n] - 1].split()[-1]
+				for pair in self.cache.keys():
+					if pair[0] in self.sounds and pair[0].strip(PUNCTUATION) != last_word.strip(PUNCTUATION):
+						if is_rhyme(self.sounds[pair[0]], self.sounds[last_word], sound=True):
+							seeds.append(pair)
 			orig_rhythm = rhythm
-			seed_word, next_word, rhythm = self.__initialize_line(orig_rhythm, rhyme, last_word)
+			seed_word, next_word, rhythm = self.__initialize_line(orig_rhythm, seeds, rhyme, last_word)
 			w1, w2 = seed_word, next_word
 			gen_words = []
 			gen_words.append(w1)
@@ -64,12 +74,12 @@ class VerseGenerator(object):
 			while len(rhythm) > 0:
 				while True:
 					i += 1
-					if i % 100 == 0:
-						seed_word, next_word, rhythm = self.__initialize_line(orig_rhythm, rhyme, last_word)
+					if i % 100000 == 0:
+						seed_word, next_word, rhythm = self.__initialize_line(orig_rhythm, seeds, rhyme, last_word)
 						w1, w2 = seed_word, next_word
 						gen_words = []
 						gen_words.append(w1)
-					if time.time() - start_time > 10:
+					if time.time() - start_time > 20:
 						raise TimeoutError
 					save_w1, save_w2 = w1, w2
 					w1, w2 = w2, random.choice(self.cache[(w1, w2)])

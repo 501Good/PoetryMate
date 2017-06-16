@@ -37,6 +37,9 @@ class VersePatternGenerator(object):
 	                elif '*' in random_choice_pattern:
 	                    while '*' in random_choice_pattern:
 	                        random_choice_pattern = np.random.choice(random_pattern, 1, p = random_probs)[0]
+	                elif '0' in random_choice_pattern:
+	                    while '0' in random_choice_pattern:
+	                        random_choice_pattern = np.random.choice(random_pattern, 1, p = random_probs)[0]
 	                result_pattern.append(random_choice_pattern)
 	            except ValueError:
 	                try:
