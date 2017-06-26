@@ -1,3 +1,5 @@
 /__pycache__/*
-/poetrymate_telegram_bot.py
-/best_stihi.txt
+/src/poetrymate_telegram_bot.py
+/res/best_stihi.txt
+/.project
+/.pydevproject

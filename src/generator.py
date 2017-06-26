@@ -1,6 +1,6 @@
 from verse_generation import VerseGenerator
 from verse_pattern_generation import VersePatternGenerator
-from verse_pattern_tools import *
+from verse_pattern_tools import get_rhymes, get_rhythms
 
 class PoetryGenerator(object):
 	def __init__(self, verseGenerator, versePatternGenerator, soundFile):
@@ -11,7 +11,7 @@ class PoetryGenerator(object):
 		verse_pattern = None
 		while verse_pattern is None:
 			try:
-				verse_pattern = self.versePatternGenerator.generate_metres(length=length)
+				verse_pattern = self.versePatternGenerator.generate_metres(length=length, strict_metre=False)
 			except ValueError:
 				pass
 			except TypeError:
@@ -30,9 +30,7 @@ class PoetryGenerator(object):
 			except KeyError:
 				print("\nOops, wrong rhythm!\n")
 				verse_pattern = self.generate_verse_pattern()
-		#rhythms = ['-+-+-+-+-', '-+-+-+-+', '-+-+-+-+-', '-+-+-+-+', '-+-+-+-+-', '-+-+-+-+-', '-+-+-+-+', '-+-+-+-+', '-+-+-+-+-', '-+-+-+-+', '-+-+-+-+', '-+-+-+-+-', '-+-+-+-+', '-+-+-+-+']
 		rhymes = get_rhymes(verse_pattern)
-		#rhymes = [1, 2, 1, 2, 5, 5, 7, 7, 9, 10, 10, 9, 13, 13]
 		print("Pattern: %s\nRhymes: %s\n" % (verse_pattern[1:], rhymes))
 		result = None
 		while result == None:
@@ -52,9 +50,9 @@ class PoetryGenerator(object):
 		
 
 def main():
-	verseGenerator = "res/poetry_cache.pm"
-	versePatternGenerator = "res/metres_transition_probs.sm"
-	soundFile = "res/sounds.pm"
+	verseGenerator = "../res/poetry_cache.pm"
+	versePatternGenerator = "../res/metres_transition_probs.sm"
+	soundFile = "../res/sounds.pm"
 	poetryGenerator = PoetryGenerator(verseGenerator, versePatternGenerator, soundFile)
 	print('\n' + poetryGenerator.generate_poetry())
 
