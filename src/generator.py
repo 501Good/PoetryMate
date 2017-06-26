@@ -46,7 +46,7 @@ class PoetryGenerator(object):
 				print("Rhymes do not fit the rhythms")
 			except KeyError:
 				print("KeyError")
-		return result
+		return result.replace("'", "")
 		
 
 def main():
